@@ -4,6 +4,7 @@
 #include <QFileSystemModel>
 
 class FileManager;
+class FileInfo;
 
 class DirModel : public QFileSystemModel
 {
@@ -24,6 +25,9 @@ public:
     void setRootPath(const QString &path);
 
     FileManager* fileManager() const;
+
+    QFileInfo fileInfo(const QModelIndex& index) const;
+    FileInfo* fileInfo(int row, const QModelIndex &parent) const;
 
 //    QModelIndex index(int row, int column, const QModelIndex &parent) const;
 //    QModelIndex index(const QString & path, int column = 0 ) const;

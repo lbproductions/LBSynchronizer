@@ -15,16 +15,20 @@ SOURCES += main.cpp\
     tablewidget.cpp \
     dirmodel.cpp \
     fileinfo.cpp \
-    filemanager.cpp
+    filemanager.cpp \
+    filtermodel.cpp
 
 HEADERS  += mainwindow.h \
     tablewidget.h \
     dirmodel.h \
     fileinfo.h \
-    filemanager.h
+    filemanager.h \
+    filtermodel.h
 
 FORMS    += \
     mainwindow.ui
+
+
 
 
 

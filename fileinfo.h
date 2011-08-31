@@ -15,7 +15,8 @@ public:
         MissingHere,
         MissingThere,
         Same,
-        Synchronized
+        Synchronized,
+        ContainsUnsynchronized
     };
 
 

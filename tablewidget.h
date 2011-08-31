@@ -10,6 +10,7 @@ class QLineEdit;
 
 class DirModel;
 class FileManager;
+class FilterModel;
 
 class DirView : public QWidget
 {
@@ -17,7 +18,9 @@ class DirView : public QWidget
 public:
     explicit DirView(QWidget *parent = 0);
 
-    FileManager* fileManager();
+    FileManager* fileManager() const;
+
+    FilterModel* filterModel() const;
 
     QString path() const;
 
@@ -31,6 +34,7 @@ private:
     QPushButton* m_buttonChoose;
     QLineEdit* m_lineEditFolder;
     DirModel* m_model;
+    FilterModel* m_filterModel;
 };
 
 #endif // TABLEWIDGET_H

@@ -47,12 +47,14 @@ void FileManager::compareTo(FileManager* other)
     qDebug() << "--- Finished ---" << endl;
 }
 
-void FileManager::compareTo(FileManager* other, const QString& path)
+bool FileManager::compareTo(FileManager* other, const QString& path)
 {
     qDebug() << "Comparing" << path;
 
     QStringList entryList = QDir(m_path.absolutePath()+path).entryList(QDir::AllEntries | QDir::NoDotAndDotDot);
     QDir otherDir(other->m_path.absolutePath()+path);
+
+    bool containsUnsynchronized = false;
 
     foreach(QString file, otherDir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot))
     {
@@ -75,11 +77,12 @@ void FileManager::compareTo(FileManager* other, const QString& path)
                 qDebug() << path + "/" + file << "missing here.";
                 fileInfo(path + "/" + file)->setStatus(FileInfo::MissingHere);
             }
+            containsUnsynchronized = true;
         }
 
         if(QFileInfo(m_path.absolutePath()+path + "/" + file).isDir())
         {
-            compareTo(other,path + "/" + file);
+            containsUnsynchronized = compareTo(other,path + "/" + file) || containsUnsynchronized;
         }
     }
 
@@ -101,8 +104,16 @@ void FileManager::compareTo(FileManager* other, const QString& path)
                 qDebug() << path + "/" + file << "missing there.";
                 info->setStatus(FileInfo::MissingThere);
             }
+            containsUnsynchronized = true;
         }
     }
+
+    if(containsUnsynchronized)
+    {
+        fileInfo(m_path.absolutePath()+path)->setStatus(FileInfo::ContainsUnsynchronized);
+    }
+
+    return containsUnsynchronized;
 }
 
 QString FileManager::findSameFileHere(FileManager* other, const QString& path, const QString& file)

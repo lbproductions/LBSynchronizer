@@ -33,6 +33,17 @@ FileManager* DirModel::fileManager() const
     return m_fileManager;
 }
 
+QFileInfo DirModel::fileInfo(const QModelIndex& index) const
+{
+    return QFileSystemModel::fileInfo(index);
+}
+
+FileInfo* DirModel::fileInfo(int row, const QModelIndex &parent) const
+{
+    QString file = fileInfo(this->index(row,0,parent)).absoluteFilePath();
+    return m_fileManager->fileInfo(file);
+}
+
 QVariant DirModel::data(const QModelIndex &index, int role) const
 {
     if(index.column() < m_columnCount)

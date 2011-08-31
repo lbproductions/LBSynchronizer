@@ -1,6 +1,7 @@
 #include "tablewidget.h"
 
 #include "dirmodel.h"
+#include "filtermodel.h"
 
 #include <QTreeView>
 #include <QVBoxLayout>
@@ -14,7 +15,8 @@ DirView::DirView(QWidget *parent) :
     m_treeView(new QTreeView),
     m_buttonChoose(new QPushButton(tr("Choose..."))),
     m_lineEditFolder(new QLineEdit),
-    m_model(new DirModel)
+    m_model(new DirModel),
+    m_filterModel(0)
 {
     m_treeView->setAlternatingRowColors(true);
     m_treeView->setFont(QFont("Lucida Grande",12));
@@ -27,7 +29,8 @@ DirView::DirView(QWidget *parent) :
     m_treeView->setSortingEnabled(true);
     m_treeView->setHeaderHidden(false);
 
-    m_treeView->setModel(m_model);
+    m_filterModel = new FilterModel(m_model,this);
+    m_treeView->setModel(m_filterModel);
 
     QHBoxLayout* folderChooserLayout = new QHBoxLayout;
     QWidget* folderChooserWidget = new QWidget;
@@ -51,15 +54,20 @@ DirView::DirView(QWidget *parent) :
     this->updateGeometry();
 }
 
-FileManager* DirView::fileManager()
+FileManager* DirView::fileManager() const
 {
     return m_model->fileManager();
+}
+
+FilterModel* DirView::filterModel() const
+{
+    return m_filterModel;
 }
 
 void DirView::setPath(const QString &path)
 {
     m_model->setRootPath(path);
-    m_treeView->setRootIndex(m_model->index(path));
+    m_treeView->setRootIndex(m_filterModel->mapFromSource(m_model->index(path)));
     m_lineEditFolder->setText(path);
 }
 

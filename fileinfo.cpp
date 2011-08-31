@@ -30,6 +30,9 @@ void FileInfo::setStatus(Status status)
     case Synchronized:
         m_statusString = tr("<Synchronized>");
         break;
+    case ContainsUnsynchronized:
+        m_statusString = tr("<Unsynchronized>");
+        break;
     default:
     case Unknown:
         m_statusString = tr("<Unknown>");

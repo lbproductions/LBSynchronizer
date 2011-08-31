@@ -20,6 +20,16 @@ public:
 private slots:
     void on_actionCompare_triggered();
 
+    void on_actionAll_files_triggered();
+
+    void on_actionSynchronized_triggered();
+
+    void on_actionUnsynchronized_triggered();
+
+    void on_actionMissing_triggered();
+
+    void on_actionRenamed_triggered();
+
 private:
     Ui::MainWindow *ui;
 

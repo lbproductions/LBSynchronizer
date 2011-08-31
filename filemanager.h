@@ -25,7 +25,7 @@ private:
     QDir m_path;
     QMap<QString, FileInfo*> m_fileInfos;
 
-    void compareTo(FileManager* other, const QString& path);
+    bool compareTo(FileManager* other, const QString& path);
 
     QString findSameFileHere(FileManager* other, const QString& path, const QString& file);
     QString findSameFileThere(FileManager* other, const QString& path, const QString& file);
