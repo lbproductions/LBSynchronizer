@@ -63,9 +63,18 @@ void FileManager::compareTo(FileManager* other, const QString& path)
         }
         else
         {
-            //TODO: Passendes file suchen
-            qDebug() << path + "/" + file << "missing here.";
-            fileInfo(path + "/" + file)->setStatus(FileInfo::MissingHere);
+            QString otherFile = findSameFileHere(other,path,file);
+            if(!otherFile.isNull())
+            {
+                qDebug() << path + "/" + otherFile << "same as" << file;
+                fileInfo(path + "/" + otherFile)->setSameFileName(file);
+                fileInfo(path + "/" + otherFile)->setStatus(FileInfo::Same);
+            }
+            else
+            {
+                qDebug() << path + "/" + file << "missing here.";
+                fileInfo(path + "/" + file)->setStatus(FileInfo::MissingHere);
+            }
         }
 
         if(QFileInfo(m_path.absolutePath()+path + "/" + file).isDir())
@@ -80,8 +89,60 @@ void FileManager::compareTo(FileManager* other, const QString& path)
         info = fileInfo(path + "/" + file);
         if(info->status() == FileInfo::Unknown)
         {
-            qDebug() << path + "/" + file << "missing there.";
-            info->setStatus(FileInfo::MissingThere);
+            QString otherFile = findSameFileThere(other,path,file);
+            if(!otherFile.isNull())
+            {
+                qDebug() << path + "/" + file << "same as" << otherFile;
+                info->setSameFileName(otherFile);
+                info->setStatus(FileInfo::Same);
+            }
+            else
+            {
+                qDebug() << path + "/" + file << "missing there.";
+                info->setStatus(FileInfo::MissingThere);
+            }
         }
     }
+}
+
+QString FileManager::findSameFileHere(FileManager* other, const QString& path, const QString& file)
+{
+    if(QFileInfo(other->m_path.absolutePath()+path + "/" + file).isDir())
+    {
+        return QString();
+    }
+
+    QFileInfo otherInfo(other->m_path.absolutePath()+path+"/"+file);
+    QDir dir(m_path.absolutePath()+path);
+    foreach(QString hereFile, dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot))
+    {
+        QFileInfo hereInfo(m_path.absolutePath()+path+"/"+hereFile);
+        if(hereInfo.size() == otherInfo.size())
+        {
+            return hereFile;
+        }
+    }
+
+    return QString();
+}
+
+QString FileManager::findSameFileThere(FileManager* other, const QString& path, const QString& file)
+{
+    if(QFileInfo(m_path.absolutePath()+path + "/" + file).isDir())
+    {
+        return QString();
+    }
+
+    QFileInfo hereInfo(m_path.absolutePath()+path+"/"+file);
+    QDir dir(other->m_path.absolutePath()+path);
+    foreach(QString otherFile, dir.entryList(QDir::AllEntries | QDir::NoDotAndDotDot))
+    {
+        QFileInfo otherInfo(other->m_path.absolutePath()+path+"/"+otherFile);
+        if(hereInfo.size() == otherInfo.size())
+        {
+            return otherFile;
+        }
+    }
+
+    return QString();
 }

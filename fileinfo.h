@@ -24,9 +24,13 @@ public:
 
     QString statusString() const;
 
+    QString sameFileName() const;
+    void setSameFileName(const QString& file);
+
 private:
     Status m_status;
     QString m_statusString;
+    QString m_sameFileName;
 };
 
 #endif // FILEINFO_H

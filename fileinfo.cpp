@@ -25,7 +25,7 @@ void FileInfo::setStatus(Status status)
         m_statusString = tr("<Missing there>");
         break;
     case Same:
-        m_statusString = tr("<Same as...>");
+        m_statusString = tr("<Same as %1>").arg(m_sameFileName);
         break;
     case Synchronized:
         m_statusString = tr("<Synchronized>");
@@ -40,4 +40,15 @@ void FileInfo::setStatus(Status status)
 QString FileInfo::statusString() const
 {
     return m_statusString;
+}
+
+
+QString FileInfo::sameFileName() const
+{
+    return m_sameFileName;
+}
+
+void FileInfo::setSameFileName(const QString& file)
+{
+    m_sameFileName = file;
 }

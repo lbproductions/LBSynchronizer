@@ -26,6 +26,10 @@ private:
     QMap<QString, FileInfo*> m_fileInfos;
 
     void compareTo(FileManager* other, const QString& path);
+
+    QString findSameFileHere(FileManager* other, const QString& path, const QString& file);
+    QString findSameFileThere(FileManager* other, const QString& path, const QString& file);
+
     void makeRelativePath(QString& absolutePath);
 };
 
