@@ -28,10 +28,14 @@ public:
     QString sameFileName() const;
     void setSameFileName(const QString& file);
 
+    Qt::CheckState checkState() const;
+    void setCheckState(Qt::CheckState checkState);
+
 private:
     Status m_status;
     QString m_statusString;
     QString m_sameFileName;
+    Qt::CheckState m_checkState;
 };
 
 #endif // FILEINFO_H

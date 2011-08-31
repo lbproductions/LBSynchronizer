@@ -44,8 +44,41 @@ FileInfo* DirModel::fileInfo(int row, const QModelIndex &parent) const
     return m_fileManager->fileInfo(file);
 }
 
+Qt::ItemFlags DirModel::flags(const QModelIndex &index) const
+{
+    Qt::ItemFlags flags = QFileSystemModel::flags(index);
+
+    if(index.isValid())
+    {
+        return flags | Qt::ItemIsUserCheckable;
+    }
+
+    return flags;
+}
+
+bool DirModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
+//    if(role == Qt::CheckStateRole)
+//    {
+//        QString file = fileInfo(index).absoluteFilePath();
+//        FileInfo* info = m_fileManager->fileInfo(file);
+
+//        info->setCheckState(static_cast<Qt::CheckState>(value.toInt()));
+//        return true;
+//    }
+
+    return false;
+}
+
 QVariant DirModel::data(const QModelIndex &index, int role) const
 {
+    if(role == Qt::CheckStateRole && index.column() == 0)
+    {
+        QString file = fileInfo(index).absoluteFilePath();
+        FileInfo* info = m_fileManager->fileInfo(file);
+        return info->checkState();
+    }
+
     if(index.column() < m_columnCount)
     {
         return QFileSystemModel::data(index,role);
