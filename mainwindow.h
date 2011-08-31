@@ -5,6 +5,10 @@
 
 class DirView;
 
+namespace Ui {
+    class MainWindow;
+}
+
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -13,9 +17,14 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+private slots:
+    void on_actionCompare_triggered();
+
 private:
-    DirView* m_tableWidgetLeft;
-    DirView* m_tableWidgetRight;
+    Ui::MainWindow *ui;
+
+    DirView* m_leftView;
+    DirView* m_rightView;
 };
 
 #endif // MAINWINDOW_H

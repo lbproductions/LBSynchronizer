@@ -3,6 +3,8 @@
 
 #include <QFileSystemModel>
 
+class FileManager;
+
 class DirModel : public QFileSystemModel
 {
     Q_OBJECT
@@ -19,27 +21,18 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
-    QModelIndex index(int row, int column, const QModelIndex &parent) const;
-    QModelIndex index(const QString & path, int column = 0 ) const;
+    void setRootPath(const QString &path);
 
-    QModelIndex parent(const QModelIndex &child) const;
+    FileManager* fileManager() const;
+
+//    QModelIndex index(int row, int column, const QModelIndex &parent) const;
+//    QModelIndex index(const QString & path, int column = 0 ) const;
+
+//    QModelIndex parent(const QModelIndex &child) const;
 
 private:
-    class FileInfo : public QObject
-    {
-    public:
-        FileInfo(const QModelIndex& parentIndex, QObject* parent = 0);
-
-        QString status;
-
-        QModelIndex parent;
-    };
-
-    FileInfo* fileInfo(const QModelIndex &index) const;
-
     int m_columnCount;
-    int originalColumnCount(const QModelIndex& index) const;
-    QMap<QModelIndex, FileInfo*> m_fileInfos;
+    FileManager* m_fileManager;
 };
 
 #endif // DIRMODEL_H

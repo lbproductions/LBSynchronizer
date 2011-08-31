@@ -9,12 +9,17 @@ class QPushButton;
 class QLineEdit;
 
 class DirModel;
+class FileManager;
 
 class DirView : public QWidget
 {
     Q_OBJECT
 public:
     explicit DirView(QWidget *parent = 0);
+
+    FileManager* fileManager();
+
+    QString path() const;
 
 public slots:
     void setPath(const QString& path);

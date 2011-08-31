@@ -7,7 +7,6 @@
 #include <QPushButton>
 #include <QLabel>
 #include <QLineEdit>
-#include <QDesktopServices>
 #include <QFileDialog>
 
 DirView::DirView(QWidget *parent) :
@@ -39,8 +38,6 @@ DirView::DirView(QWidget *parent) :
     folderChooserLayout->addWidget(m_lineEditFolder);
     folderChooserLayout->addWidget(m_buttonChoose);
 
-    setPath(QDesktopServices::storageLocation(QDesktopServices::HomeLocation));
-
     QVBoxLayout* l = new QVBoxLayout;
     l->setContentsMargins(0,0,0,0);
     l->addWidget(folderChooserWidget);
@@ -49,6 +46,14 @@ DirView::DirView(QWidget *parent) :
 
     connect(m_buttonChoose,SIGNAL(clicked()),this,SLOT(chooseDir()));
     connect(m_lineEditFolder,SIGNAL(returnPressed()),this,SLOT(setPathFromLineEdit()));
+
+    this->setSizePolicy(QSizePolicy::MinimumExpanding,QSizePolicy::MinimumExpanding);
+    this->updateGeometry();
+}
+
+FileManager* DirView::fileManager()
+{
+    return m_model->fileManager();
 }
 
 void DirView::setPath(const QString &path)
@@ -75,6 +80,11 @@ void DirView::chooseDir()
         QString path = list.at(0);
         setPath(path);
     }
+}
+
+QString DirView::path() const
+{
+    return m_lineEditFolder->text();
 }
 
 void DirView::setPathFromLineEdit()

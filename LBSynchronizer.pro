@@ -13,13 +13,23 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     tablewidget.cpp \
-    dirmodel.cpp
+    dirmodel.cpp \
+    fileinfo.cpp \
+    filemanager.cpp
 
 HEADERS  += mainwindow.h \
     tablewidget.h \
-    dirmodel.h
+    dirmodel.h \
+    fileinfo.h \
+    filemanager.h
 
-FORMS    +=
+FORMS    += \
+    mainwindow.ui
+
+
+
+
+
 
 
 

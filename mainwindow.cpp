@@ -1,32 +1,49 @@
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 #include "tablewidget.h"
+#include "filemanager.h"
 
-#include <QVBoxLayout>
-#include <QDirModel>
 #include <QSplitter>
+#include <QSettings>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
+    QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    m_leftView(new DirView),
+    m_rightView(new DirView)
 {
-    QWidget* centralWidget = new QWidget;
-    QLayout* centralLayout = new QVBoxLayout;
-    centralLayout->setContentsMargins(0,0,0,0);
-    centralWidget->setLayout(centralLayout);
+    ui->setupUi(this);
+
+    QSettings settings;
+
+    m_leftView->setPath(settings.value("leftpath",QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).toString());
+    m_rightView->setPath(settings.value("rightpath",QDesktopServices::storageLocation(QDesktopServices::HomeLocation)).toString());
 
     QSplitter* splitter = new QSplitter;
+    splitter->addWidget(m_leftView);
+    splitter->addWidget(m_rightView);
 
-    m_tableWidgetLeft = new DirView;
-    m_tableWidgetRight = new DirView;
-
-    splitter->addWidget(m_tableWidgetLeft);
-    splitter->addWidget(m_tableWidgetRight);
-
-    centralLayout->addWidget(splitter);
-
-    setCentralWidget(centralWidget);
+    setCentralWidget(splitter);
+    statusBar()->showMessage(tr("Please choose two foldersand press \"Compare\""));
 }
 
 MainWindow::~MainWindow()
 {
+    QSettings settings;
+
+    settings.setValue("leftpath",m_leftView->path());
+    settings.setValue("rightpath",m_rightView->path());
+
+    delete ui;
+}
+
+void MainWindow::on_actionCompare_triggered()
+{
+    statusBar()->showMessage(tr("Comparing left to right..."));
+    m_leftView->fileManager()->compareTo(m_rightView->fileManager());
+    statusBar()->showMessage(tr("Comparing right to left..."));
+    m_rightView->fileManager()->compareTo(m_leftView->fileManager());
+    statusBar()->showMessage(tr("Finished"));
 }
