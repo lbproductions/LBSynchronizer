@@ -2,13 +2,15 @@
 
 #include "filemanager.h"
 #include "fileinfo.h"
+#include "tablewidget.h"
 
 #include <QDebug>
 
-DirModel::DirModel(QObject *parent) :
-    QFileSystemModel(parent),
+DirModel::DirModel(DirView *view) :
+    QFileSystemModel(view),
     m_columnCount(QFileSystemModel::columnCount()),
-    m_fileManager(new FileManager(rootPath(),this))
+    m_fileManager(new FileManager(rootPath(),this)),
+    m_view(view)
 {
 }
 
@@ -58,14 +60,25 @@ Qt::ItemFlags DirModel::flags(const QModelIndex &index) const
 
 bool DirModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-//    if(role == Qt::CheckStateRole)
-//    {
-//        QString file = fileInfo(index).absoluteFilePath();
-//        FileInfo* info = m_fileManager->fileInfo(file);
+    if(role == Qt::CheckStateRole && index.isValid())
+    {
+        QString file = fileInfo(index).absoluteFilePath();
+        FileInfo* info = m_fileManager->fileInfo(file);
 
-//        info->setCheckState(static_cast<Qt::CheckState>(value.toInt()));
-//        return true;
-//    }
+        if(info->status() != FileInfo::Synchronized)
+        {
+            info->setCheckState(static_cast<Qt::CheckState>(value.toInt()));
+            if(hasChildren(index))
+            {
+                for(int i = 0; i < columnCount(index); ++i)
+                {
+                    setData(index.child(i,0),value,role);
+                }
+            }
+            emit dataChanged(index,index);
+            return true;
+        }
+    }
 
     return false;
 }

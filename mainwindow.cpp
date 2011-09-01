@@ -56,6 +56,8 @@ void MainWindow::on_actionCompare_triggered()
     m_rightView->fileManager()->compareTo(m_leftView->fileManager());
     statusBar()->showMessage(tr("Finished comparing. You may now synchronize"));
     ui->actionSynchronize->setEnabled(true);
+    ui->actionUse_left_filenames->setEnabled(true);
+    ui->actionUse_right_filenames->setEnabled(true);
 }
 
 void MainWindow::on_actionAll_files_triggered()
@@ -86,4 +88,18 @@ void MainWindow::on_actionRenamed_triggered()
 {
     m_leftView->filterModel()->setFilter(FilterModel::Renamed);
     m_rightView->filterModel()->setFilter(FilterModel::Renamed);
+}
+
+void MainWindow::on_actionUse_left_filenames_triggered()
+{
+    statusBar()->showMessage(tr("Renaming files..."));
+    m_rightView->fileManager()->rename();
+    statusBar()->showMessage(tr("Finished"));
+}
+
+void MainWindow::on_actionUse_right_filenames_triggered()
+{
+    statusBar()->showMessage(tr("Renaming files..."));
+    m_leftView->fileManager()->rename();
+    statusBar()->showMessage(tr("Finished"));
 }

@@ -39,6 +39,8 @@
     </property>
     <addaction name="actionCompare"/>
     <addaction name="actionSynchronize"/>
+    <addaction name="actionUse_left_filenames"/>
+    <addaction name="actionUse_right_filenames"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -72,6 +74,8 @@
    </attribute>
    <addaction name="actionCompare"/>
    <addaction name="actionSynchronize"/>
+   <addaction name="actionUse_left_filenames"/>
+   <addaction name="actionUse_right_filenames"/>
   </widget>
   <action name="actionCompare">
    <property name="text">
@@ -127,6 +131,22 @@
    </property>
    <property name="text">
     <string>Renamed</string>
+   </property>
+  </action>
+  <action name="actionUse_left_filenames">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Use left filenames</string>
+   </property>
+  </action>
+  <action name="actionUse_right_filenames">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Use right filenames</string>
    </property>
   </action>
  </widget>

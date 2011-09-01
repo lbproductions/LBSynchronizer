@@ -15,7 +15,7 @@ DirView::DirView(QWidget *parent) :
     m_treeView(new QTreeView),
     m_buttonChoose(new QPushButton(tr("Choose..."))),
     m_lineEditFolder(new QLineEdit),
-    m_model(new DirModel),
+    m_model(new DirModel(this)),
     m_filterModel(0)
 {
     m_treeView->setAlternatingRowColors(true);
