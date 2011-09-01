@@ -30,6 +30,10 @@ private slots:
 
     void on_actionRenamed_triggered();
 
+    void on_actionUse_left_filenames_triggered();
+
+    void on_actionUse_right_filenames_triggered();
+
 private:
     Ui::MainWindow *ui;
 

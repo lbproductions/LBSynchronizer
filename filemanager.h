@@ -6,17 +6,20 @@
 #include <QDir>
 
 class FileInfo;
+class DirModel;
 
 class FileManager : public QObject
 {
     Q_OBJECT
 public:
-    explicit FileManager(const QString& path, QObject *parent = 0);
+    explicit FileManager(const QString& path, DirModel* model);
     ~FileManager();
 
     FileInfo* fileInfo(const QString& file);
 
     void compareTo(FileManager* other);
+
+    void rename();
 
 signals:
     void fileAdded(FileInfo* info);
@@ -24,6 +27,8 @@ signals:
 private:
     QDir m_path;
     QMap<QString, FileInfo*> m_fileInfos;
+    DirModel* m_model;
+    bool m_compareFinished;
 
     bool compareTo(FileManager* other, const QString& path);
 

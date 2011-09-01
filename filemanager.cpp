@@ -1,12 +1,15 @@
 #include "filemanager.h"
 
 #include "fileinfo.h"
+#include "dirmodel.h"
 
 #include <QDebug>
 
-FileManager::FileManager(const QString& path, QObject *parent) :
-    QObject(parent),
-    m_path(path)
+FileManager::FileManager(const QString& path, DirModel* model) :
+    QObject(model),
+    m_path(path),
+    m_model(model),
+    m_compareFinished(false)
 {
 }
 
@@ -40,11 +43,35 @@ FileInfo* FileManager::fileInfo(const QString& path)
     return m_fileInfos.value(file);
 }
 
+void FileManager::rename()
+{
+    if(!m_compareFinished)
+    {
+        return;
+    }
+
+    QMapIterator<QString, FileInfo*> it(m_fileInfos);
+    while(it.hasNext())
+    {
+        it.next();
+        FileInfo* info = it.value();
+
+        if(info->status() == FileInfo::Same && info->checkState() == Qt::Checked)
+        {
+            QString fileName = it.key();
+            QFile file(m_path.absolutePath()+fileName);
+            file.rename(m_path.absolutePath()+info->path()+"/"+info->sameFileName());
+            qDebug() << "Renaming" << m_path.absolutePath()+fileName<< "to" << m_path.absolutePath()+info->path()+"/"+info->sameFileName();
+        }
+    }
+}
+
 void FileManager::compareTo(FileManager* other)
 {
     qDebug() << "--- Comparing" << m_path.absolutePath() << "to" << other->m_path.absolutePath() << "---";
     compareTo(other, QString(""));
     qDebug() << "--- Finished ---" << endl;
+    m_compareFinished = true;
 }
 
 bool FileManager::compareTo(FileManager* other, const QString& path)

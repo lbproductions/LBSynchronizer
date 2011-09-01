@@ -5,12 +5,13 @@
 
 class FileManager;
 class FileInfo;
+class DirView;
 
 class DirModel : public QFileSystemModel
 {
     Q_OBJECT
 public:
-    explicit DirModel(QObject *parent = 0);
+    explicit DirModel(DirView* view);
 
     enum Columns {
         Status,
@@ -39,6 +40,7 @@ public:
 private:
     int m_columnCount;
     FileManager* m_fileManager;
+    DirView* m_view;
 };
 
 #endif // DIRMODEL_H
